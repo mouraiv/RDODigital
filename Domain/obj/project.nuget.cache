@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "FygD0w1GHNyN/n2T2eP0XuNjiB0fan1d57OTFT41/LhRL/qZmQGwJwcsoi9EjDO99Z9t+ITeCfbMbKuyHguaNg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\wesley.moura\\Documents\\PROJETO MOBILE FISCALIZAÇÃO\\RDODigital\\Domain\\Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\wesley.moura\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
