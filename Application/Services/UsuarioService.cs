@@ -3,18 +3,21 @@ using Domain.Entities;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Interfaces;
+using Domain.Exceptions;
 
 namespace Application.Services
 {
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        
         private readonly IMapper _mapper;
 
         public UsuarioService(IUsuarioRepository usuarioRepository, IMapper mapper)
         {
             _usuarioRepository = usuarioRepository;
             _mapper = mapper;
+
         }
 
         public async Task<UsuarioDTO> GetByIdAsync(int id)
@@ -37,15 +40,30 @@ namespace Application.Services
             if (string.IsNullOrWhiteSpace(usuarioDto.Senha))
                 throw new ArgumentException("Senha não pode ser vazia");
 
-            var usuario = _mapper.Map<Usuario>(usuarioDto);
-            
+            // Criar usuário com validação de senha
+            var usuario = new Usuario(usuarioDto.Senha);
+
+            _mapper.Map(usuarioDto, usuario);
+
             // Tratamento manual para campos não mapeados automaticamente
-            usuario.SenhaHash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Senha);
+            usuario.Senha_hash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Senha);
             usuario.DataCriacao = DateTime.UtcNow;
             usuario.Ativo = true;
             
             await _usuarioRepository.AddAsync(usuario);
             return _mapper.Map<UsuarioDTO>(usuario);
+        }
+
+        public async Task UpdatePhotoPathAsync(int usuarioId, string pathFile)
+        {
+            var usuario = await _usuarioRepository.GetByIdAsync(usuarioId);
+            if (usuario == null)
+            {
+                throw new DomainException("Usuário não encontrado");
+            }
+            
+            usuario.Foto_perfil = pathFile;
+            await _usuarioRepository.UpdateAsync(usuarioId, usuario);
         }
 
         public async Task UpdateAsync(int id, UpdateUsuarioDTO usuarioDto)

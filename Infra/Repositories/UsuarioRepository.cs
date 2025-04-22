@@ -19,7 +19,9 @@ namespace Infra.Repositories
             var query = "SELECT * FROM Usuarios WHERE id_usuario = @Id";
             
             using var connection = _context.CreateConnection();
-            return await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Id = id }) ?? throw new KeyNotFoundException($"Usuário com ID {id} não encontrado.");
+            var result = await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Id = id });
+    
+            return result ?? throw new KeyNotFoundException($"Usuário com ID {id} não encontrado.");
         }
 
         public async Task<IEnumerable<Usuario>> GetAllAsync()
@@ -34,11 +36,11 @@ namespace Infra.Repositories
         {
             var query = @"INSERT INTO Usuarios 
                         (matricula, nome, email, senha_hash, cargo, foto_perfil, telefone_corporativo, data_admissao, ativo, data_criacao)
-                        VALUES (@Matricula, @Nome, @Email, @SenhaHash, @Cargo, @FotoPerfil, @TelefoneCorporativo, @DataAdmissao, @Ativo, @DataCriacao);
+                        VALUES (@Matricula, @Nome, @Email, @Senha_hash, @Cargo, @Foto_perfil, @Telefone_corporativo, @Data_admissao, @Ativo, @DataCriacao);
                         SELECT LAST_INSERT_ID();";
             
             using var connection = _context.CreateConnection();
-            usuario.Id = await connection.ExecuteScalarAsync<int>(query, usuario);
+            usuario.Id_usuario = await connection.ExecuteScalarAsync<int>(query, usuario);
         }
 
         public async Task UpdateAsync(int id, Usuario usuario)
@@ -47,11 +49,11 @@ namespace Infra.Repositories
                         matricula = @Matricula,
                         nome = @Nome,
                         email = @Email,
-                        senha_hash = @SenhaHash,
+                        senha_hash = @Senha_hash,
                         cargo = @Cargo,
-                        foto_perfil = @FotoPerfil,
-                        telefone_corporativo = @TelefoneCorporativo,
-                        data_admissao = @DataAdmissao,
+                        foto_perfil = @Foto_perfil,
+                        telefone_corporativo = @Telefone_corporativo,
+                        data_admissao = @Data_admissao,
                         ativo = @Ativo
                         WHERE id_usuario = @Id";
             
@@ -60,11 +62,11 @@ namespace Infra.Repositories
                 usuario.Matricula,
                 usuario.Nome,
                 usuario.Email,
-                usuario.SenhaHash,
+                usuario.Senha_hash,
                 usuario.Cargo,
-                usuario.FotoPerfil,
-                usuario.TelefoneCorporativo,
-                usuario.DataAdmissao,
+                usuario.Foto_perfil,
+                usuario.Telefone_corporativo,
+                usuario.Data_admissao,
                 usuario.Ativo,
                 Id = id
             });

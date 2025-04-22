@@ -4,7 +4,7 @@ using Domain.Interfaces;
 using Dapper;
 using Infra.Data;
 
-namespace RDODigital.Infra.Repositories;
+namespace Infra.Repositories;
 
 public class StatusConexaoRepository : IStatusConexaoRepository
 {

@@ -1,0 +1,9 @@
+namespace Application.Interfaces{
+
+    public interface IFileUserService{
+        Task<string> SaveFileAsync(Stream file, string fileName, int matricula);
+        void ValidateFile(Stream file, string fileName);
+        Task DeleteFileAsync(string filePath); // Novo método para deletar arquivo
+        string GetUserPhotoPath(int matricula); // Novo método para obter o caminho atual
+    }
+}

@@ -71,3 +71,5 @@ C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\obj
 C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\obj\Debug\net7.0\API.pdb
 C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\obj\Debug\net7.0\API.genruntimeconfig.cache
 C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\obj\Debug\net7.0\ref\API.dll
+C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\bin\Debug\net7.0\API.xml
+C:\Users\wesley.moura\Documents\PROJETO MOBILE FISCALIZAÇÃO\RDODigital\API\obj\Debug\net7.0\API.xml

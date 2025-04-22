@@ -9,5 +9,6 @@ namespace Application.Interfaces
         Task<UsuarioDTO> AddAsync(CreateUsuarioDTO usuarioDto);
         Task UpdateAsync(int id, UpdateUsuarioDTO usuarioDto);
         Task DeleteAsync(int id);
+        Task UpdatePhotoPathAsync(int usuarioId, string pathFile);
     }
 }

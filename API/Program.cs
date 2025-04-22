@@ -17,8 +17,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API para o sistema de fiscalização mobile",
         Contact = new OpenApiContact
         {
-            Name = "Sua Equipe",
-            Email = "suporte@rdodigital.com"
+            Name = "Wesley Moura",
+            Email = "wesley.moura@logictel.com.br"
         }
     });
     

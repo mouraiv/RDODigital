@@ -25,6 +25,8 @@ public static class ServiceExtensions
         
         // Services
         services.AddScoped<IUsuarioService, UsuarioService>();
+        // Adicione esta linha no seu Program.cs
+        services.AddScoped<IFileUserService, FileUserService>();
         
         return services;
     }
