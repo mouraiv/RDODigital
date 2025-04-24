@@ -23,4 +23,12 @@ namespace Application.Exceptions
         public NotFoundException(string message, Exception innerException)
             : base(message, innerException) { }
     }
+
+    public class ConflictException : BaseException
+    {
+        public ConflictException(string message) : base(message) { }
+
+        public ConflictException(string message, Exception innerException)
+            : base(message, innerException) { }
+    }
 }

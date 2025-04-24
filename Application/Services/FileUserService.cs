@@ -7,13 +7,13 @@ namespace Application.Services
     {
         public async Task DeleteFileAsync(string filePath)
         {
-            try
+            if (string.IsNullOrEmpty(filePath))
             {
-                if (string.IsNullOrEmpty(filePath))
-                {
-                    throw new NotFoundException("Caminho do arquivo inválido");
-                } 
+                throw new NotFoundException("Caminho do arquivo inválido");
+            }
 
+            try
+            { 
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);
@@ -33,14 +33,11 @@ namespace Application.Services
             }
         }
 
-        public string GetUserPhotoPath(int matricula)
+        public string GetUserPhotoPath(int? matricula, string profile)
         {
             try
             {
-                if (matricula <= 0)
-                throw new NotFoundException("Matrícula inválida");
-
-                string userFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Usuarios", $"{matricula}");
+                string userFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", $"{profile}", $"{matricula}");
                 
                 if (!Directory.Exists(userFolder))
                     return null ?? "";
@@ -55,18 +52,12 @@ namespace Application.Services
             }
         }
 
-        public async Task<string> SaveFileAsync(Stream file, string fileName, int matricula)
+        public async Task<string> SaveFileAsync(Stream file, string fileName, string profile, int? matricula)
         {
             try
             {
-                if (matricula <= 0)
-                throw new NotFoundException("Matrícula inválida");
-            
-                if(file == null || file.Length == 0)
-                    throw new NotFoundException("Nenhum arquivo foi enviado.");
-
                 // Caminho onde o arquivo será salvo 
-                string folder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Usuarios", $"{matricula}");
+                string folder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", $"{profile}", $"{matricula}");
 
                 // Verificar se o caminho (pasta) existe, se não existir será criado
                 if (!Directory.Exists(folder))
@@ -110,35 +101,22 @@ namespace Application.Services
 
         public void ValidateFile(Stream file, string fileName)
         {
-            try
+            // Validar o tamanho máximo do arquivo (2MB)
+            if (file.Length > 2 * 1024 * 1024)
             {
-                // Verificar se o arquivo foi recebido
-                if (file == null || file.Length == 0)
-                {
-                    throw new NotFoundException("Nenhuma imagem foi enviada.");
-                }
-
-                // Validar o tamanho máximo do arquivo (2MB)
-                if (file.Length > 2 * 1024 * 1024)
-                {
-                    throw new NotFoundException("A imagem deve ter no máximo 2MB");
-                }
-
-                // Lista de extensões permitidas
-                var extensoesPermitidas = new[] { ".jpg", ".jpeg", ".png" };
-
-                // Capturar extensão do arquivo
-                var extensao = Path.GetExtension(fileName)?.ToLower();
-                
-                // Validar extensão permitida
-                if (string.IsNullOrEmpty(extensao) || !extensoesPermitidas.Contains(extensao))
-                {
-                    throw new NotFoundException("A imagem deve ser no formato JPG, JPEG, PNG");
-                }
+                throw new ConflictException("A imagem deve ter no máximo 2MB");
             }
-            catch (Exception ex)
+
+            // Lista de extensões permitidas
+            var extensoesPermitidas = new[] { ".jpg", ".jpeg", ".png" };
+
+            // Capturar extensão do arquivo
+            var extensao = Path.GetExtension(fileName)?.ToLower();
+            
+            // Validar extensão permitida
+            if (string.IsNullOrEmpty(extensao) || !extensoesPermitidas.Contains(extensao))
             {
-                throw new AppException($"Erro ao validar o arquivo: {ex.Message}");
+                throw new ConflictException("A imagem deve ser no formato JPG, JPEG, PNG");
             }
         }
     }

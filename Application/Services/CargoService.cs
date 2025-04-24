@@ -20,48 +20,34 @@ public class CargoService : ICargoService
 
     public async Task<CargoDTO?> GetByIdAsync(int id)
     {
-        try
+        var cargo = await _repository.GetByIdAsync(id);
+        if (cargo == null)
         {
-            var cargo = await _repository.GetByIdAsync(id);
-            if (cargo == null)
-            {
-                throw new NotFoundException($"Cargo com ID {id} não encontrado.");
-            }
-            return _mapper.Map<CargoDTO>(cargo);
+            throw new NotFoundException($"Cargo com ID {id} não encontrado.");
         }
-        catch (Exception ex)
-        {
-            throw new AppException($"Erro ao obter o cargo: {ex.Message}", ex);
-        }
+        return _mapper.Map<CargoDTO>(cargo);
     }
 
     public async Task<IEnumerable<CargoDTO>> GetAllAsync()
     {
-        try
+        var cargos = await _repository.GetAllAsync();
+        if (cargos == null || !cargos.Any())
         {
-            var cargos = await _repository.GetAllAsync();
-            if (cargos == null || !cargos.Any())
-            {
-                throw new NotFoundException("Nenhum cargo encontrado.");
-            }
-            return _mapper.Map<IEnumerable<CargoDTO>>(cargos);
+            throw new NotFoundException("Nenhum cargo encontrado.");
         }
-        catch (Exception ex)
-        {
-            throw new AppException($"Erro ao obter os cargos: {ex.Message}", ex);
-        }
+        return _mapper.Map<IEnumerable<CargoDTO>>(cargos);
     }
 
     public async Task<CargoDTO> CreateAsync(CreateCargoDTO dto)
     {
+        var existingCargo = await _repository.GetByNameAsync(dto.Nome);
+        if (existingCargo != null)
+        {
+            throw new ConflictException($"Cargo com nome {dto.Nome} já existe.");
+        }
+
         try
         {
-            var existingCargo = await _repository.GetByNameAsync(dto.Nome);
-            if (existingCargo != null)
-            {
-                throw new NotFoundException($"Cargo com nome {dto.Nome} já existe.");
-            }
-
             var cargo = _mapper.Map<Cargo>(dto);
             var id = await _repository.CreateAsync(cargo);
             var createdCargo = await _repository.GetByIdAsync(id);
@@ -75,14 +61,14 @@ public class CargoService : ICargoService
 
     public async Task<bool> UpdateAsync(UpdateCargoDTO dto)
     {
+        var existingCargo = await _repository.GetByIdAsync(dto.Id);
+        if (existingCargo == null)
+        {
+            throw new NotFoundException($"Cargo com ID {dto.Id} não encontrado.");
+        }
+
         try
         {
-            var existingCargo = await _repository.GetByIdAsync(dto.Id);
-            if (existingCargo == null)
-            {
-                throw new NotFoundException($"Cargo com ID {dto.Id} não encontrado.");
-            }
-
             var cargo = _mapper.Map<Cargo>(dto);
             return await _repository.UpdateAsync(cargo);
         }
@@ -94,18 +80,11 @@ public class CargoService : ICargoService
 
     public async Task<bool> DeleteAsync(int id)
     {
-        try
+        var cargo = await _repository.DeleteAsync(id);
+        if (!cargo)
         {
-            var cargo = await _repository.DeleteAsync(id);
-            if (!cargo)
-            {
-                throw new NotFoundException($"Cargo com ID {id} não encontrado.");
-            }
-            return true;
+            throw new NotFoundException($"Cargo com ID {id} não encontrado.");
         }
-        catch (Exception ex)
-        {
-            throw new AppException($"Erro ao deletar o cargo: {ex.Message}", ex);
-        }
+        return true;
     }
 }
