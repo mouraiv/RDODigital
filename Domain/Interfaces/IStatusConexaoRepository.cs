@@ -4,8 +4,11 @@ namespace Domain.Interfaces
 {
     public interface IStatusConexaoRepository
     {
-        Task AtualizarStatusAsync(StatusConexao status);
-        Task<StatusConexao> GetStatusPorUsuarioAsync(int usuarioId);
+        Task<StatusConexao> GetByIdAsync(int id);
+        Task<IEnumerable<StatusConexao>> GetByUsuarioIdAsync(int usuarioId);
+        Task<int> CreateAsync(StatusConexao status);
+        Task<bool> UpdateAsync(StatusConexao status);
+        Task<bool> DeleteAsync(int id);
         
     }
 }

@@ -1,33 +1,50 @@
-// RDODigital.Application/Services/StatusConexaoService.cs
-using Application.Interfaces;
+// Application/Services/StatusConexaoService.cs
 using Application.DTOs;
-using Domain.Interfaces;
-using Domain.Entities;
+using Application.Interfaces;
 using AutoMapper;
+using Domain.Entities;
+using Domain.Interfaces;
 
-namespace RDODigital.Application.Services;
+namespace Application.Services;
 
 public class StatusConexaoService : IStatusConexaoService
 {
     private readonly IStatusConexaoRepository _repository;
     private readonly IMapper _mapper;
-    
+
     public StatusConexaoService(IStatusConexaoRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
     }
 
-    public async Task AtualizarStatusAsync(AtualizarStatusDTO statusDto)
+    public async Task<StatusConexaoDTO?> GetByIdAsync(int id)
     {
-        var status = _mapper.Map<StatusConexao>(statusDto);
-        status.UltimaVerificacao = DateTime.UtcNow;
-        await _repository.AtualizarStatusAsync(status);
+        var status = await _repository.GetByIdAsync(id);
+        return _mapper.Map<StatusConexaoDTO>(status);
     }
 
-    public async Task<StatusConexaoDTO> GetStatusUsuarioAsync(int idUsuario)
+    public async Task<IEnumerable<StatusConexaoDTO>> GetByUsuarioIdAsync(int usuarioId)
     {
-        var status = await _repository.GetStatusPorUsuarioAsync(idUsuario);
+        var statusList = await _repository.GetByUsuarioIdAsync(usuarioId);
+        return _mapper.Map<IEnumerable<StatusConexaoDTO>>(statusList);
+    }
+
+    public async Task<StatusConexaoDTO> CreateAsync(CreateStatusConexaoDTO dto)
+    {
+        var status = _mapper.Map<StatusConexao>(dto);
+        await _repository.CreateAsync(status);
         return _mapper.Map<StatusConexaoDTO>(status);
+    }
+
+    public async Task<bool> UpdateAsync(UpdateStatusConexaoDTO dto)
+    {
+        var status = _mapper.Map<StatusConexao>(dto);
+        return await _repository.UpdateAsync(status);
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        return await _repository.DeleteAsync(id);
     }
 }

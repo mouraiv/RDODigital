@@ -1,11 +1,10 @@
 // Extensions/ServiceExtensions.cs
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Infra.Data;
 using Domain.Interfaces;
 using Infra.Repositories;
 using Application.Interfaces;
 using Application.Services;
+using Domain.Repositories;
 
 public static class ServiceExtensions
 {
@@ -22,11 +21,14 @@ public static class ServiceExtensions
     {
         // Repositórios
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+        services.AddScoped<IStatusConexaoRepository, StatusConexaoRepository>();
+        services.AddScoped<ICargoRepository ,CargoRepository>();
         
         // Services
         services.AddScoped<IUsuarioService, UsuarioService>();
-        // Adicione esta linha no seu Program.cs
         services.AddScoped<IFileUserService, FileUserService>();
+        services.AddScoped<IStatusConexaoService, StatusConexaoService>();
+        services.AddScoped<ICargoService, CargoService>();
         
         return services;
     }

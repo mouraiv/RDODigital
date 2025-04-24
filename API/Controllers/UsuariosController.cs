@@ -1,7 +1,5 @@
 using Application.DTOs;
 using Application.Interfaces;
-using Domain.Exceptions;
-using Infra.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -28,123 +26,94 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetAll()
         {
             var usuarios = await _usuarioService.GetAllAsync();
+            if (usuarios == null || !usuarios.Any())
+            {
+                return NotFound(new { Message = "Nenhum usuário encontrado." });
+            }
             return Ok(usuarios);
+
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<UsuarioDTO>> GetById(int id)
         {
             var usuario = await _usuarioService.GetByIdAsync(id);
-            return usuario == null ? NotFound() : Ok(usuario);
+            if (usuario == null)
+            {
+                return NotFound(new { Message = $"Usuário com ID {id} não encontrado." });
+            }
+            return Ok(usuario);
         }
 
         [HttpPost]
         public async Task<ActionResult<UsuarioDTO>> Create(IFormFile file, [FromQuery] CreateUsuarioDTO usuarioDto)
         {
-            try
-            {
-                if (file == null || file.Length == 0)
-                    return BadRequest("Nenhuma imagem foi enviada.");
+            if (file == null || file.Length == 0)
+                return BadRequest("Nenhuma imagem foi enviada.");
 
-                using (var stream = file.OpenReadStream())
-                {
-                    // Validação inicial
-                    _fileUserService.ValidateFile(stream, file.FileName);
-                    
-                    // Cria usuário primeiro (sem foto)
-                    var usuario = await _usuarioService.AddAsync(usuarioDto);
-                    
-                    // Salva a imagem e atualiza usuário
-                    await ProcessUserImage(stream, file.FileName, usuario);
-                    
-                    return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
-                }
-            }
-            catch (DomainException ex)
+            using (var stream = file.OpenReadStream())
             {
-                _logger.LogWarning(ex, "Erro de domínio ao criar usuário");
-                return BadRequest(ex.Message);
-            }
-            catch (FileNotFoundException ex)
-            {
-                _logger.LogWarning(ex, "Arquivo não encontrado");
-                return NotFound(ex.Message);
-            }
-            catch (InfrastructureException ex)
-            {
-                _logger.LogError(ex, "Erro de infraestrutura");
-                return StatusCode(500, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro inesperado");
-                return StatusCode(500, "Ocorreu um erro interno");
+                // Validação inicial
+                _fileUserService.ValidateFile(stream, file.FileName);
+                
+                // Cria usuário primeiro (sem foto)
+                var usuario = await _usuarioService.AddAsync(usuarioDto);
+
+                if (usuario == null)
+                    return BadRequest("Erro ao criar o usuário.");
+                
+                // Salva a imagem e atualiza usuário
+                await ProcessUserImage(stream, file.FileName, usuario);
+                
+                return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] UpdateUsuarioDTO usuarioDto, IFormFile file)
         {
-            try
+            var usuarioExistente = await _usuarioService.GetByIdAsync(id);
+
+            if (usuarioExistente == null)
+                return NotFound("Usuário não encontrado");
+
+            // Atualiza dados do usuário
+            await _usuarioService.UpdateAsync(id, usuarioDto);
+
+
+            // Processa imagem se foi enviada
+            if (file != null && file.Length > 0)
             {
-                var usuarioExistente = await _usuarioService.GetByIdAsync(id);
-                if (usuarioExistente == null)
-                    return NotFound("Usuário não encontrado");
-
-                // Atualiza dados do usuário
-                await _usuarioService.UpdateAsync(id, usuarioDto);
-
-                // Processa imagem se foi enviada
-                if (file != null && file.Length > 0)
+                using (var stream = file.OpenReadStream())
                 {
-                    using (var stream = file.OpenReadStream())
-                    {
-                        _fileUserService.ValidateFile(stream, file.FileName);
-                        await ProcessUserImage(stream, file.FileName, usuarioExistente);
-                    }
+                    _fileUserService.ValidateFile(stream, file.FileName);
+                    await ProcessUserImage(stream, file.FileName, usuarioExistente);
                 }
+            }
 
-                return NoContent();
-            }
-            catch (DomainException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao atualizar usuário");
-                return StatusCode(500, "Erro interno ao atualizar usuário");
-            }
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var usuario = await _usuarioService.GetByIdAsync(id);
-                if (usuario == null)
-                    return NotFound();
+            var usuario = await _usuarioService.GetByIdAsync(id);
+            if (usuario == null)
+                return NotFound("Usuário não encontrado");
 
-                // Remove a imagem associada se existir
-                if (!string.IsNullOrEmpty(usuario.Foto_perfil))
-                {
-                    await _fileUserService.DeleteFileAsync(usuario.Foto_perfil);
-                }
-
-                await _usuarioService.DeleteAsync(id);
-                return NoContent();
-            }
-            catch (Exception ex)
+            // Remove a imagem associada se existir
+            if (!string.IsNullOrEmpty(usuario.Foto_perfil))
             {
-                _logger.LogError(ex, "Erro ao deletar usuário");
-                return StatusCode(500, "Erro interno ao deletar usuário");
+                await _fileUserService.DeleteFileAsync(usuario.Foto_perfil);
             }
+
+            await _usuarioService.DeleteAsync(id);
+
+            return NoContent();
         }
 
         private async Task ProcessUserImage(Stream stream, string fileName, UsuarioDTO usuario)
         {
-            // Remove imagem antiga se existir
             if (!string.IsNullOrEmpty(usuario.Foto_perfil))
             {
                 await _fileUserService.DeleteFileAsync(usuario.Foto_perfil);

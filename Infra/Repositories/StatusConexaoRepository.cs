@@ -1,7 +1,7 @@
-// RDODigital.Infra/Repositories/StatusConexaoRepository.cs
+// Infrastructure/Repositories/StatusConexaoRepository.cs
+using Dapper;
 using Domain.Entities;
 using Domain.Interfaces;
-using Dapper;
 using Infra.Data;
 
 namespace Infra.Repositories;
@@ -9,55 +9,72 @@ namespace Infra.Repositories;
 public class StatusConexaoRepository : IStatusConexaoRepository
 {
     private readonly DapperContext _context;
-    
+
     public StatusConexaoRepository(DapperContext context)
     {
         _context = context;
     }
 
-    public async Task AtualizarStatusAsync(StatusConexao status)
+    public async Task<StatusConexao> GetByIdAsync(int id)
     {
-        var query = @"INSERT INTO StatusConexao 
-                     (id_usuario, status, ultima_verificacao, forca_sinal, tipo_conexao)
-                     VALUES (@IdUsuario, @Status, @UltimaVerificacao, @ForcaSinal, @TipoConexao)
-                     ON DUPLICATE KEY UPDATE
-                     status = VALUES(status),
-                     ultima_verificacao = VALUES(ultima_verificacao),
-                     forca_sinal = VALUES(forca_sinal),
-                     tipo_conexao = VALUES(tipo_conexao)";
-        
+        var query = "SELECT * FROM StatusConexao WHERE Id_Status = @Id";
+
         using var connection = _context.CreateConnection();
-        await connection.ExecuteAsync(query, new {
-            IdUsuario = status.IdUsuario,
-            Status = status.Status,
-            UltimaVerificacao = status.UltimaVerificacao,
-            ForcaSinal = status.ForcaSinal,
-            TipoConexao = status.TipoConexao
-        });
+        
+        var result = await connection.QueryFirstOrDefaultAsync<StatusConexao>(query, new { Id = id });
+        return result ?? throw new KeyNotFoundException($"Usuário com ID {id} não encontrado.");
+        
     }
 
-    public async Task<StatusConexao> GetStatusPorUsuarioAsync(int usuarioId)
+    public async Task<IEnumerable<StatusConexao>> GetByUsuarioIdAsync(int usuarioId)
     {
-        var query = @"SELECT 
-                        id_status AS IdStatus,
-                        id_usuario AS IdUsuario,
-                        status AS Status,
-                        ultima_verificacao AS UltimaVerificacao,
-                        forca_sinal AS ForcaSinal,
-                        tipo_conexao AS TipoConexao
-                     FROM StatusConexao 
-                     WHERE id_usuario = @UsuarioId
-                     ORDER BY ultima_verificacao DESC 
-                     LIMIT 1";
-        
-        using var connection = _context.CreateConnection();
-        return await connection.QueryFirstOrDefaultAsync<StatusConexao>(query, new { UsuarioId = usuarioId }) ?? new StatusConexao
+        using (var connection = _context.CreateConnection())
         {
-            IdUsuario = usuarioId,
-            UltimaVerificacao = DateTime.Now,
-            ForcaSinal = 0,
-            TipoConexao = string.Empty,
-            Status = string.Empty
-        };
+            var query = "SELECT * FROM StatusConexao WHERE Id_Usuario = @UsuarioId";
+            return await connection.QueryAsync<StatusConexao>(query, new { UsuarioId = usuarioId });
+        }
     }
+
+    public async Task<int> CreateAsync(StatusConexao status)
+    {
+        using (var connection = _context.CreateConnection())
+        {
+            var query = @"INSERT INTO StatusConexao 
+                         (Id_Usuario, Status, Ultima_Verificacao, Forca_Sinal, Tipo_Conexao, Latitude, Longitude) 
+                         VALUES 
+                         (@Id_Usuario, @Status, @Ultima_Verificacao, @Forca_Sinal, @Tipo_Conexao, @Latitude, @Longitude);
+                         SELECT LAST_INSERT_ID();";
+            
+            return await connection.ExecuteScalarAsync<int>(query, status);
+        }
+    }
+
+    public async Task<bool> UpdateAsync(StatusConexao status)
+    {
+        using (var connection = _context.CreateConnection())
+        {
+            var query = @"UPDATE StatusConexao SET 
+                         Status = @Status,
+                         Ultima_Verificacao = @Ultima_Verificacao,
+                         Forca_Sinal = @Forca_Sinal,
+                         Tipo_Conexao = @Tipo_Conexao,
+                         Latitude = @Latitude,
+                         Longitude = @Longitude
+                         WHERE Id_Status = @Id_Status";
+            
+            var affectedRows = await connection.ExecuteAsync(query, status);
+            return affectedRows > 0;
+        }
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        using (var connection = _context.CreateConnection())
+        {
+            var query = "DELETE FROM StatusConexao WHERE Id_Status = @Id";
+            var affectedRows = await connection.ExecuteAsync(query, new { Id = id });
+            return affectedRows > 0;
+        }
+    }
+
 }
