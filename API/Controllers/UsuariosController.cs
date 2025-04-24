@@ -9,14 +9,10 @@ namespace API.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
-        private readonly ILogger<UsuariosController> _logger;
 
-        public UsuariosController(
-            IUsuarioService usuarioService, 
-            ILogger<UsuariosController> logger)
+        public UsuariosController(IUsuarioService usuarioService)
         {
             _usuarioService = usuarioService;
-            _logger = logger;
         }
 
         [HttpGet]

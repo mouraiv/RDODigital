@@ -9,14 +9,9 @@ namespace API.Controllers;
 public class StatusConexaoController : ControllerBase
 {
     private readonly IStatusConexaoService _service;
-    private readonly ILogger<StatusConexaoController> _logger;
-
-    public StatusConexaoController(
-        IStatusConexaoService service,
-        ILogger<StatusConexaoController> logger)
+    public StatusConexaoController(IStatusConexaoService service)
     {
         _service = service;
-        _logger = logger;
     }
 
     [HttpGet("{id}")]

@@ -63,7 +63,13 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "RDODigital API v1");
     });
 }
+else
+{
+    app.UseExceptionHandler("/error");
+    app.UseHsts();
+}
 
+app.UseMiddleware<ExceptionHandling>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

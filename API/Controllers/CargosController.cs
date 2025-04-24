@@ -9,12 +9,10 @@ namespace API.Controllers;
 public class CargosController : ControllerBase
 {
     private readonly ICargoService _service;
-    private readonly ILogger<CargosController> _logger;
 
-    public CargosController(ICargoService service, ILogger<CargosController> logger)
+    public CargosController(ICargoService service)
     {
         _service = service;
-        _logger = logger;
     }
 
     [HttpGet]
