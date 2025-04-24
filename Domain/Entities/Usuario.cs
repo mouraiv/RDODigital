@@ -28,21 +28,18 @@ namespace Domain.Entities
 
         public void ValidarSenha(string senha)
         {
-            if (string.IsNullOrWhiteSpace(senha))
-                throw new DomainException("A senha não pode ser vazia");
+            var regex = new Regex(@"^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z]).{8,}$");
 
-                var regex = new Regex(@"^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.*[a-z]).{8,}$");
-
-                if (!regex.IsMatch(senha))
-                {
-                    throw new DomainException(
-                        "A senha deve conter:\n" +
-                        "- No mínimo 8 caracteres\n" +
-                        "- Pelo menos 1 letra maiúscula\n" +
-                        "- Pelo menos 1 letra minúscula\n" +
-                        "- Pelo menos 1 número\n" +
-                        "- Pelo menos 1 caractere especial (!@#$%^&*)");
-                }
+            if (!regex.IsMatch(senha))
+            {
+                throw new BusinessException(
+                    "A senha deve conter:\n" +
+                    "- No mínimo 8 caracteres\n" +
+                    "- Pelo menos 1 letra maiúscula\n" +
+                    "- Pelo menos 1 letra minúscula\n" +
+                    "- Pelo menos 1 número\n" +
+                    "- Pelo menos 1 caractere especial (!@#$%^&*)");
+            }
 
             Senha_hash = BCrypt.Net.BCrypt.HashPassword(senha);
         }
