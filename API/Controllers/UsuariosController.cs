@@ -65,7 +65,10 @@ namespace API.Controllers
                 // Salva a imagem e atualiza usuário
                 await ProcessUserImage(stream, file.FileName, usuario);
                 
-                return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, usuario);
+                return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, new {
+                    Message = "Usuário criado com sucesso.",
+                    Usuario = usuario
+                });
             }
         }
 
@@ -90,8 +93,7 @@ namespace API.Controllers
                     await ProcessUserImage(stream, file.FileName, usuarioExistente);
                 }
             }
-
-            return NoContent();
+            return Ok(new { Message = "Usuário atualizado com sucesso.", Usuario = usuarioExistente});
         }
 
         [HttpDelete("{id}")]
@@ -108,8 +110,8 @@ namespace API.Controllers
             }
 
             await _usuarioService.DeleteAsync(id);
-
-            return NoContent();
+            
+            return Ok(new { Message = "Usuário excluído com sucesso." });
         }
 
         private async Task ProcessUserImage(Stream stream, string fileName, UsuarioDTO usuario)

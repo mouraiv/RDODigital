@@ -38,7 +38,7 @@ public class StatusConexaoController : ControllerBase
         {
             return NotFound(new { Message = $"Nenhum status encontrado para o usuário ID {usuarioId}." });
         }
-        return statusList.Any() ? Ok(statusList) : NotFound(new { Message = $"Nenhum status encontrado para o usuário ID {usuarioId}." });
+        return Ok(statusList);
     }
 
     [HttpPost]
@@ -50,10 +50,10 @@ public class StatusConexaoController : ControllerBase
         {
             return BadRequest(new { Message = "Erro ao criar o status de conexão." });
         }
-        return CreatedAtAction(
-            nameof(GetById), 
-            new { id = createdStatus.IdStatus }, 
-            createdStatus);
+        return CreatedAtAction(nameof(GetById), new { id = createdStatus.IdStatus }, new{
+            Message = "Status de conexão criado com sucesso.",
+            StatusConexao = createdStatus
+        });
     }
 
     [HttpPut]
@@ -64,7 +64,7 @@ public class StatusConexaoController : ControllerBase
         {
             return NotFound(new { Message = $"Status de conexão com ID {dto.IdStatus} não encontrado para atualização." });
         }
-        return NoContent();
+        return Ok(new { Message = "Status de conexão atualizado com sucesso." });
     }
 
     [HttpDelete("{id}")]
@@ -75,6 +75,6 @@ public class StatusConexaoController : ControllerBase
         {
             return NotFound(new { Message = $"Status de conexão com ID {id} não encontrado para exclusão." });
         }
-        return NoContent();
+        return Ok(new { Message = "Status de conexão excluído com sucesso." });
     }
 }

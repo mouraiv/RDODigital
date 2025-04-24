@@ -47,7 +47,10 @@ public class CargosController : ControllerBase
         {
             return BadRequest(new { Message = "Erro ao criar o cargo." });
         }
-        return CreatedAtAction(nameof(GetById), new { id = createdCargo.Id }, createdCargo);
+        return CreatedAtAction(nameof(GetById), new { id = createdCargo.Id }, new {
+            Message = "Cargo criado com sucesso.",
+            Cargo = createdCargo
+        });
     }
 
     [HttpPut]
@@ -58,7 +61,7 @@ public class CargosController : ControllerBase
         {
             return NotFound(new { Message = $"Cargo com ID {dto.Id} não encontrado para atualização." });
         }
-        return NoContent();
+        return Ok(new { Message = $"Cargo com ID {dto.Id} atualizado com sucesso." });
         
     }
 
@@ -70,6 +73,6 @@ public class CargosController : ControllerBase
         {
             return NotFound(new { Message = $"Cargo com ID {id} não encontrado para exclusão." });
         }
-        return NoContent();
+        return Ok(new { Message = $"Cargo com ID {id} excluído com sucesso." });
     }
 }
