@@ -70,6 +70,10 @@ namespace Application.Services
                 throw new AppException("Matrícula do usuário não foi informada.");
             }
 
+            var usuarioMatriculaExistente = await _usuarioRepository.GetByMatriculaAsync(usuario.Matricula.Value);
+            if (usuarioMatriculaExistente != null)
+                throw new ConflictException("Matrícula já está em uso, escolha outra matrícula.");
+
             usuario.Senha_hash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Senha);
             usuario.DataCriacao = DateTime.UtcNow;
             usuario.Ativo = true;
