@@ -6,7 +6,7 @@ namespace Domain.Repositories;
 
 public interface ICargoRepository
 {
-    Task<Cargo> GetByIdAsync(int id);
+    Task<Cargo?> GetByIdAsync(int id);
     Task<IEnumerable<Cargo>> GetAllAsync();
     Task<Cargo?> GetByNameAsync(string nome);
     Task<int> CreateAsync(Cargo cargo);

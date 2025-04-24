@@ -6,8 +6,8 @@ namespace Application.Interfaces
     {
         Task<UsuarioDTO> GetByIdAsync(int id);
         Task<IEnumerable<UsuarioDTO>> GetAllAsync();
-        Task<UsuarioDTO> AddAsync(CreateUsuarioDTO usuarioDto);
-        Task UpdateAsync(int id, UpdateUsuarioDTO usuarioDto);
+        Task<UsuarioDTO> AddAsync(CreateUsuarioDTO usuarioDto, Stream fileStream, string fileName);
+        Task UpdateAsync(int id, UpdateUsuarioDTO usuarioDto, Stream fileStream, string fileName);
         Task DeleteAsync(int id);
         Task UpdatePhotoPathAsync(int usuarioId, string pathFile);
     }

@@ -21,10 +21,6 @@ public class CargosController : ControllerBase
     public async Task<ActionResult<IEnumerable<CargoDTO>>> GetAll()
     {
         var cargos = await _service.GetAllAsync();
-        if (cargos == null || !cargos.Any())
-        {
-            return NotFound(new { Message = "Nenhum cargo encontrado." });
-        }
         return Ok(cargos);
     }
 
@@ -32,10 +28,6 @@ public class CargosController : ControllerBase
     public async Task<ActionResult<CargoDTO>> GetById(int id)
     {
         var cargo = await _service.GetByIdAsync(id);
-        if (cargo == null)
-        {
-            return NotFound(new { Message = $"Cargo com ID {id} não encontrado." });
-        }
         return Ok(cargo);
     }
 
@@ -43,10 +35,6 @@ public class CargosController : ControllerBase
     public async Task<ActionResult<CargoDTO>> Create(CreateCargoDTO dto)
     {
         var createdCargo = await _service.CreateAsync(dto);
-        if (createdCargo == null)
-        {
-            return BadRequest(new { Message = "Erro ao criar o cargo." });
-        }
         return CreatedAtAction(nameof(GetById), new { id = createdCargo.Id }, new {
             Message = "Cargo criado com sucesso.",
             Cargo = createdCargo
@@ -56,11 +44,7 @@ public class CargosController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update(UpdateCargoDTO dto)
     {
-        var result = await _service.UpdateAsync(dto);
-        if (!result)
-        {
-            return NotFound(new { Message = $"Cargo com ID {dto.Id} não encontrado para atualização." });
-        }
+        await _service.UpdateAsync(dto);
         return Ok(new { Message = $"Cargo com ID {dto.Id} atualizado com sucesso." });
         
     }
@@ -68,11 +52,7 @@ public class CargosController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _service.DeleteAsync(id);
-        if (!result)
-        {
-            return NotFound(new { Message = $"Cargo com ID {id} não encontrado para exclusão." });
-        }
+        await _service.DeleteAsync(id);
         return Ok(new { Message = $"Cargo com ID {id} excluído com sucesso." });
     }
 }

@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Interfaces;
 
 namespace Application.Services
@@ -7,7 +8,7 @@ namespace Application.Services
         public async Task DeleteFileAsync(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
-                return;
+                throw new NotFoundException("Caminho do arquivo inválido"); 
 
             if (File.Exists(filePath))
             {
@@ -26,7 +27,7 @@ namespace Application.Services
         public string GetUserPhotoPath(int matricula)
         {
             if (matricula <= 0)
-                throw new ArgumentException("Matrícula inválida");
+                throw new NotFoundException("Matrícula inválida");
 
             string userFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Usuarios", $"{matricula}");
             
@@ -40,8 +41,9 @@ namespace Application.Services
 
         public async Task<string> SaveFileAsync(Stream file, string fileName, int matricula)
         {
+            
             if (matricula <= 0)
-                throw new ArgumentException("Matrícula inválida");
+                throw new NotFoundException("Matrícula inválida");
 
             // Caminho onde o arquivo será salvo 
             string folder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "Usuarios", $"{matricula}");
@@ -86,13 +88,13 @@ namespace Application.Services
             // Verificar se o arquivo foi recebido
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("Nenhuma imagem foi enviada.");
+                throw new NotFoundException("Nenhuma imagem foi enviada.");
             }
 
             // Validar o tamanho máximo do arquivo (2MB)
             if (file.Length > 2 * 1024 * 1024)
             {
-                throw new ArgumentException("A imagem deve ter no máximo 2MB");
+                throw new NotFoundException("A imagem deve ter no máximo 2MB");
             }
 
             // Lista de extensões permitidas
@@ -104,7 +106,7 @@ namespace Application.Services
             // Validar extensão permitida
             if (string.IsNullOrEmpty(extensao) || !extensoesPermitidas.Contains(extensao))
             {
-                throw new ArgumentException("A imagem deve ser no formato JPG, JPEG, PNG");
+                throw new NotFoundException("A imagem deve ser no formato JPG, JPEG, PNG");
             }
         }
     }
