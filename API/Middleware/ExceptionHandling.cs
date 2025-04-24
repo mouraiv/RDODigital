@@ -25,6 +25,13 @@ public class ExceptionHandling
             httpContext.Response.ContentType = "application/json";
             await httpContext.Response.WriteAsJsonAsync(new { message = ex.Message });
         }
+        catch (ConflictException ex)
+        {
+            _logger.LogWarning(ex, "Recurso Conflitante.");
+            httpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            httpContext.Response.ContentType = "application/json";
+            await httpContext.Response.WriteAsJsonAsync(new { message = ex.Message });
+        }
         catch (BusinessException ex)
         {
             _logger.LogWarning(ex, "Erro de negócio.");

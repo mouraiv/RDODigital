@@ -48,7 +48,22 @@ namespace Infra.Repositories
                 throw new InfrastructureException("Erro ao buscar usuário por e-mail.", ex);
             }
         }
-
+        public async Task<Usuario?> GetByMatriculaAsync(int matricula)
+        {
+            try
+            {
+                var query = "SELECT * FROM Usuarios WHERE matricula = @Matricula";
+            
+                using var connection = _context.CreateConnection();
+                var result = await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Matricula = matricula });
+        
+                return result;
+            }
+            catch (InfrastructureException ex)
+            {
+                throw new InfrastructureException("Erro ao buscar usuário por mátricula.", ex);
+            }
+        }
         public async Task<IEnumerable<Usuario>> GetAllAsync()
         {
             try

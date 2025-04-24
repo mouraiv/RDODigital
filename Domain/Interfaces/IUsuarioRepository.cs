@@ -6,6 +6,7 @@ namespace Domain.Interfaces
     {
         Task<Usuario?> GetByIdAsync(int id);
         Task<Usuario?> GetByIdEmailAsync(string email);
+        Task<Usuario?> GetByMatriculaAsync(int matricula);
         Task<IEnumerable<Usuario>> GetAllAsync();
         Task AddAsync(Usuario usuario);
         Task UpdateAsync(int id, Usuario usuario);
