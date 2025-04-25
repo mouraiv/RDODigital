@@ -64,14 +64,17 @@ namespace Application.DTOs
         [Required(ErrorMessage = "O campo cidade é obrigatório.")]
         public string Cidade { get; set; } = null!;
         [Required(ErrorMessage = "O campo mês de referência é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime MesReferencia { get; set; }
         [Required(ErrorMessage = "O campo fiscal é obrigatório.")]
         public int IdFiscal { get; set; }
         [Required(ErrorMessage = "O campo supervisor é obrigatório.")]
         public int IdSupervisor { get; set; }
         [Required(ErrorMessage = "O campo data de início é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime DataInicio { get; set; }
         [Required(ErrorMessage = "O campo data de fim é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime DataFim { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }

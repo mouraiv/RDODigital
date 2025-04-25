@@ -18,6 +18,7 @@ namespace Application.DTOs
         [Required(ErrorMessage = "O campo Id do projeto é obrigatório.")]
         public int IdProjeto { get; set; }
         [Required(ErrorMessage = "O campo Data e Hora é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime DataHora { get; set; }
         [Required(ErrorMessage = "O campo Id da atividade é obrigatório.")]
         public int IdAtividade { get; set; }
@@ -31,6 +32,7 @@ namespace Application.DTOs
         [Required(ErrorMessage = "O campo Id do projeto é obrigatório.")]
         public int IdProjeto { get; set; }
         [Required(ErrorMessage = "O campo Data e Hora é obrigatório.")]
+        [DataType(DataType.Date)]
         public DateTime DataHora { get; set; }
         [Required(ErrorMessage = "O campo Id da atividade é obrigatório.")]
         public int IdAtividade { get; set; }

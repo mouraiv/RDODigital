@@ -30,6 +30,7 @@ namespace Application.DTOs
         public string Nome { get; set; } = string.Empty;
         [Required(ErrorMessage = "O campo Descrição é obrigatório.")]
         public string? Descricao { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DataCriacao { get; set; }
     }
 }

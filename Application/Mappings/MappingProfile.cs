@@ -172,5 +172,21 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.Data_hora))
             .ForMember(dest => dest.IdAtividade, opt => opt.MapFrom(src => src.Id_atividade))
             .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade));
+
+        // Mapeamentos para RelatorioDiario
+        CreateMap<CreateRelatorioDiarioDTO, RelatorioDiario>()
+            .ForMember(dest => dest.Id_relatorio, opt => opt.Ignore())
+            .ForMember(dest => dest.Sincronizado, opt => opt.MapFrom(_ => false))
+            .ForMember(dest => dest.Ultima_sincronizacao, opt => opt.Ignore());
+
+        CreateMap<UpdateRelatorioDiarioDTO, RelatorioDiario>()
+            .ForMember(dest => dest.Id_relatorio, opt => opt.MapFrom(src => src.Id));
+
+        CreateMap<RelatorioDiario, RelatorioDiarioDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id_relatorio));
+
+        CreateMap<RelatorioDiarioDTO, RelatorioDiario>()
+            .ForMember(dest => dest.Id_relatorio, opt => opt.MapFrom(src => src.Id));
+
     }
 }
