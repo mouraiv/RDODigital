@@ -67,8 +67,7 @@ public class MappingProfile : Profile
         CreateMap<CreateClienteDTO, Cliente>()
             .ForMember(dest => dest.Nome_cliente, opt => opt.MapFrom(src => src.NomeCliente))
             .ForMember(dest => dest.Data_cadastro, opt => opt.MapFrom(_ => DateTime.UtcNow))
-            .ForMember(dest => dest.Ativo, opt => opt.MapFrom(_ => true))
-            .ForMember(dest => dest.Foto_perfil, opt => opt.MapFrom(src => src.Foto_perfil));
+            .ForMember(dest => dest.Ativo, opt => opt.MapFrom(_ => true));
         
         CreateMap<UpdateClienteDTO, Cliente>()
             .ForMember(dest => dest.Nome_cliente, opt => opt.MapFrom(src => src.NomeCliente))

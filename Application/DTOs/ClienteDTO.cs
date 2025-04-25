@@ -16,12 +16,6 @@ namespace Application.DTOs
         [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string? NomeCliente { get; set; }
 
-        [Required(ErrorMessage = "O campo data de cadastro é obrigatório.")]
-        [DataType(DataType.Date)]
-        public DateTime DataCadastro { get; set; }
-
-        public string? Foto_perfil { get; set; }
-
         public bool Ativo { get; set; }
     }
 
@@ -30,7 +24,6 @@ namespace Application.DTOs
         [Required(ErrorMessage = "O campo nome é obrigatório.")]
         public string? NomeCliente { get; set; }
 
-        [Required(ErrorMessage = "O campo data de cadastro é obrigatório.")]
         [DataType(DataType.Date)]
         public DateTime DataCadastro { get; set; }
 
