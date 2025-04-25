@@ -23,12 +23,14 @@ public static class ServiceExtensions
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IStatusConexaoRepository, StatusConexaoRepository>();
         services.AddScoped<ICargoRepository ,CargoRepository>();
+        services.AddScoped<IClienteRepository ,ClienteRepository>();
         
         // Services
         services.AddScoped<IUsuarioService, UsuarioService>();
         services.AddScoped<IFileUserService, FileUserService>();
         services.AddScoped<IStatusConexaoService, StatusConexaoService>();
         services.AddScoped<ICargoService, CargoService>();
+        services.AddScoped<IClienteService, ClienteService>();
         
         return services;
     }

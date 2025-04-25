@@ -52,12 +52,14 @@ namespace Application.Services
             }
         }
 
-        public async Task<string> SaveFileAsync(Stream file, string fileName, string profile, int? matricula)
+        public async Task<string> SaveFileAsync(Stream file, string fileName, string profile, int? matricula, string? nome)
         {
             try
             {
                 // Caminho onde o arquivo será salvo 
-                string folder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", $"{profile}", $"{matricula}");
+                string folder = 
+                    matricula == 0 ? Path.Combine(Directory.GetCurrentDirectory(), "Uploads", $"{profile}", $"{nome}") : 
+                                     Path.Combine(Directory.GetCurrentDirectory(), "Uploads", $"{profile}", $"{matricula}");
 
                 // Verificar se o caminho (pasta) existe, se não existir será criado
                 if (!Directory.Exists(folder))
@@ -79,7 +81,10 @@ namespace Application.Services
                 
                 // Gera nome único mantendo a extensão original
                 var fileExtension = Path.GetExtension(safeFileName);
-                var uniqueFileName = $"{matricula}_profile{fileExtension}";
+                var uniqueFileName = 
+                    matricula == 0 ? 
+                        $"{nome}_profile{fileExtension}" : 
+                        $"{matricula}_profile{fileExtension}";
 
                 // Cria caminho absoluto do arquivo
                 string filePath = Path.Combine(folder, uniqueFileName);

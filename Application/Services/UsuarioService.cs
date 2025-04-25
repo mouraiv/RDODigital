@@ -87,7 +87,8 @@ namespace Application.Services
                     fileStream,
                     fileName,
                     "Usuarios",
-                    usuario.Matricula);
+                    usuario.Matricula,
+                    null);
 
                 return _mapper.Map<UsuarioDTO>(usuario);
             }
@@ -140,7 +141,7 @@ namespace Application.Services
                 if (fileStream != null && fileStream.Length > 0)
                 {
                     _fileUserService.ValidateFile(fileStream, fileName);
-                    string novoCaminho = await _fileUserService.SaveFileAsync(fileStream, fileName, "Usuarios", usuario.Matricula);
+                    string novoCaminho = await _fileUserService.SaveFileAsync(fileStream, fileName, "Usuarios", usuario.Matricula, null);
                     usuario.Foto_perfil = novoCaminho;
                 }
 
@@ -180,7 +181,7 @@ namespace Application.Services
         private async Task<string> ProcessarImagemAsync(Stream fileStream, string fileName, int matricula)
         {
             _fileUserService.ValidateFile(fileStream, fileName);
-            return await _fileUserService.SaveFileAsync(fileStream, fileName, "Usuarios", matricula);
+            return await _fileUserService.SaveFileAsync(fileStream, fileName, "Usuarios", matricula, null);
         }
     }
 }

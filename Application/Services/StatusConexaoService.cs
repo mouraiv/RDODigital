@@ -41,14 +41,18 @@ public class StatusConexaoService : IStatusConexaoService
 
     public async Task<StatusConexaoDTO> CreateAsync(CreateStatusConexaoDTO dto)
     {
-        var statusDto = _mapper.Map<StatusConexao>(dto);  
-        var status = await _repository.CreateAsync(statusDto);
-        if (status == 0)
+        var statusEntity = _mapper.Map<StatusConexao>(dto);
+
+        var newId = await _repository.CreateAsync(statusEntity);
+        if (newId == 0)
         {
-            throw new NotFoundException("Erro ao criar o status de conexão.");
+            throw new ConflictException("Erro ao criar o status de conexão.");
         }
-        return _mapper.Map<StatusConexaoDTO>(status);
+
+        var statusCriado = await _repository.GetByIdAsync(newId);
+        return _mapper.Map<StatusConexaoDTO>(statusCriado);
     }
+
 
     public async Task<bool> UpdateAsync(UpdateStatusConexaoDTO dto)
     {
@@ -56,7 +60,7 @@ public class StatusConexaoService : IStatusConexaoService
         var status = await _repository.UpdateAsync(statusDto);
         if (!status)
         {
-            throw new NotFoundException("Erro ao atualizar o status de conexão.");
+            throw new ConflictException("Erro ao atualizar o status de conexão.");
         }
         return true;
     }
