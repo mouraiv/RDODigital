@@ -151,5 +151,26 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ProgressoTempo, opt => opt.MapFrom(src => src.Progresso_tempo))
             .ForMember(dest => dest.ProgressoProjeto, opt => opt.MapFrom(src => src.Progresso_projeto))
             .ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.Data_criacao));
+
+        // Mapeamentos para Material
+        CreateMap<CreateMaterialDTO, Material>()
+            .ForMember(dest => dest.Id_projeto, opt => opt.MapFrom(src => src.IdProjeto))
+            .ForMember(dest => dest.Data_hora, opt => opt.MapFrom(src => src.DataHora))
+            .ForMember(dest => dest.Id_atividade, opt => opt.MapFrom(src => src.IdAtividade))
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade));
+
+        CreateMap<UpdateMaterialDTO, Material>()
+            .ForMember(dest => dest.Id_material, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Id_projeto, opt => opt.MapFrom(src => src.IdProjeto))
+            .ForMember(dest => dest.Data_hora, opt => opt.MapFrom(src => src.DataHora))
+            .ForMember(dest => dest.Id_atividade, opt => opt.MapFrom(src => src.IdAtividade))
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade));
+
+        CreateMap<Material, MaterialDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id_material))
+            .ForMember(dest => dest.IdProjeto, opt => opt.MapFrom(src => src.Id_projeto))
+            .ForMember(dest => dest.DataHora, opt => opt.MapFrom(src => src.Data_hora))
+            .ForMember(dest => dest.IdAtividade, opt => opt.MapFrom(src => src.Id_atividade))
+            .ForMember(dest => dest.Quantidade, opt => opt.MapFrom(src => src.Quantidade));
     }
 }

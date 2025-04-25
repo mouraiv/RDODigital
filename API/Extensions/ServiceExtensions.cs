@@ -26,6 +26,7 @@ public static class ServiceExtensions
         services.AddScoped<IClienteRepository ,ClienteRepository>();
         services.AddScoped<IAtividadeRepository ,AtividadeRepository>();
         services.AddScoped<IProjetoRepository ,ProjetoRepository>();
+        services.AddScoped<IMaterialRepository ,MaterialRepository>();
         
         // Services
         services.AddScoped<IUsuarioService, UsuarioService>();
@@ -35,6 +36,7 @@ public static class ServiceExtensions
         services.AddScoped<IClienteService, ClienteService>();
         services.AddScoped<IAtividadeService, AtividadeService>();
         services.AddScoped<IProjetoService, ProjetoService>();
+        services.AddScoped<IMaterialService, MaterialService>();
         
         return services;
     }
