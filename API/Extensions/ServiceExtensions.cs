@@ -24,6 +24,8 @@ public static class ServiceExtensions
         services.AddScoped<IStatusConexaoRepository, StatusConexaoRepository>();
         services.AddScoped<ICargoRepository ,CargoRepository>();
         services.AddScoped<IClienteRepository ,ClienteRepository>();
+        services.AddScoped<IAtividadeRepository ,AtividadeRepository>();
+        services.AddScoped<IProjetoRepository ,ProjetoRepository>();
         
         // Services
         services.AddScoped<IUsuarioService, UsuarioService>();
@@ -31,6 +33,8 @@ public static class ServiceExtensions
         services.AddScoped<IStatusConexaoService, StatusConexaoService>();
         services.AddScoped<ICargoService, CargoService>();
         services.AddScoped<IClienteService, ClienteService>();
+        services.AddScoped<IAtividadeService, AtividadeService>();
+        services.AddScoped<IProjetoService, ProjetoService>();
         
         return services;
     }

@@ -81,5 +81,75 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.DataCadastro, opt => opt.MapFrom(src => src.Data_cadastro))
             .ForMember(dest => dest.Ativo, opt => opt.MapFrom(src => src.Ativo))
             .ForMember(dest => dest.Foto_perfil, opt => opt.MapFrom(src => src.Foto_perfil));
+
+        // Mapeamentos para Atividade
+        CreateMap<CreateAtividadeDTO, Atividade>()
+            .ForMember(dest => dest.Nome_atividade, opt => opt.MapFrom(src => src.NomeAtividade))
+            .ForMember(dest => dest.Id_cliente, opt => opt.MapFrom(src => src.IdCliente))
+            .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item))
+            .ForMember(dest => dest.Classe, opt => opt.MapFrom(src => src.Classe))
+            .ForMember(dest => dest.Unidade_medida, opt => opt.MapFrom(src => src.UnidadeMedida));
+
+        CreateMap<UpdateAtividadeDTO, Atividade>()
+            .ForMember(dest => dest.Id_atividade, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Nome_atividade, opt => opt.MapFrom(src => src.NomeAtividade))
+            .ForMember(dest => dest.Id_cliente, opt => opt.MapFrom(src => src.IdCliente))
+            .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item))
+            .ForMember(dest => dest.Classe, opt => opt.MapFrom(src => src.Classe))
+            .ForMember(dest => dest.Unidade_medida, opt => opt.MapFrom(src => src.UnidadeMedida));
+
+        CreateMap<Atividade, AtividadeDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id_atividade))
+            .ForMember(dest => dest.NomeAtividade, opt => opt.MapFrom(src => src.Nome_atividade))
+            .ForMember(dest => dest.IdCliente, opt => opt.MapFrom(src => src.Id_cliente))
+            .ForMember(dest => dest.Item, opt => opt.MapFrom(src => src.Item))
+            .ForMember(dest => dest.Classe, opt => opt.MapFrom(src => src.Classe))
+            .ForMember(dest => dest.UnidadeMedida, opt => opt.MapFrom(src => src.Unidade_medida));
+
+        // Mapeamentos para projeto
+        CreateMap<CreateProjetoDTO, Projeto>()
+            .ForMember(dest => dest.Titulo_infovia, opt => opt.MapFrom(src => src.TituloInfovia))
+            .ForMember(dest => dest.Id_cliente, opt => opt.MapFrom(src => src.IdCliente))
+            .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Cidade))
+            .ForMember(dest => dest.Mes_referencia, opt => opt.MapFrom(src => src.MesReferencia))
+            .ForMember(dest => dest.Id_fiscal, opt => opt.MapFrom(src => src.IdFiscal))
+            .ForMember(dest => dest.Id_supervisor, opt => opt.MapFrom(src => src.IdSupervisor))
+            .ForMember(dest => dest.Data_inicio, opt => opt.MapFrom(src => src.DataInicio))
+            .ForMember(dest => dest.Data_fim, opt => opt.MapFrom(src => src.DataFim))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude));
+
+        CreateMap<UpdateProjetoDTO, Projeto>()
+            .ForMember(dest => dest.Id_projeto, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Titulo_infovia, opt => opt.MapFrom(src => src.TituloInfovia))
+            .ForMember(dest => dest.Id_cliente, opt => opt.MapFrom(src => src.IdCliente))
+            .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Cidade))
+            .ForMember(dest => dest.Mes_referencia, opt => opt.MapFrom(src => src.MesReferencia))
+            .ForMember(dest => dest.Id_fiscal, opt => opt.MapFrom(src => src.IdFiscal))
+            .ForMember(dest => dest.Id_supervisor, opt => opt.MapFrom(src => src.IdSupervisor))
+            .ForMember(dest => dest.Data_inicio, opt => opt.MapFrom(src => src.DataInicio))
+            .ForMember(dest => dest.Data_fim, opt => opt.MapFrom(src => src.DataFim))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.Progresso_tempo, opt => opt.MapFrom(src => src.ProgressoTempo))
+            .ForMember(dest => dest.Progresso_projeto, opt => opt.MapFrom(src => src.ProgressoProjeto));
+
+        CreateMap<Projeto, ProjetoDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id_projeto))
+            .ForMember(dest => dest.TituloInfovia, opt => opt.MapFrom(src => src.Titulo_infovia))
+            .ForMember(dest => dest.IdCliente, opt => opt.MapFrom(src => src.Id_cliente))
+            .ForMember(dest => dest.Cidade, opt => opt.MapFrom(src => src.Cidade))
+            .ForMember(dest => dest.MesReferencia, opt => opt.MapFrom(src => src.Mes_referencia))
+            .ForMember(dest => dest.IdFiscal, opt => opt.MapFrom(src => src.Id_fiscal))
+            .ForMember(dest => dest.IdSupervisor, opt => opt.MapFrom(src => src.Id_supervisor))
+            .ForMember(dest => dest.DataInicio, opt => opt.MapFrom(src => src.Data_inicio))
+            .ForMember(dest => dest.DataFim, opt => opt.MapFrom(src => src.Data_fim))
+            .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+            .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+            .ForMember(dest => dest.ProgressoTempo, opt => opt.MapFrom(src => src.Progresso_tempo))
+            .ForMember(dest => dest.ProgressoProjeto, opt => opt.MapFrom(src => src.Progresso_projeto))
+            .ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.Data_criacao));
     }
 }

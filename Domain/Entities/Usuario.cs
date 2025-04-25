@@ -17,7 +17,7 @@ namespace Domain.Entities
         public string? Telefone_corporativo { get; set; }
         public DateTime Data_admissao { get; set; }
         public bool Ativo { get; set; }
-        public DateTime DataCriacao { get; set; }
+        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
         public Usuario() {}
 
