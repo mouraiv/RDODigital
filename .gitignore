@@ -1,0 +1,18 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
+# Uploads da aplicação
+/API/Uploads/
