@@ -68,7 +68,7 @@ public class AtividadeService : IAtividadeService
         }
 
         var AtividadeExistente = await _repository.GetByNameAsync(dto.NomeAtividade);
-            if (AtividadeExistente != null && AtividadeExistente.Id_atividade != existingAtividade.Id_atividade)
+            if (AtividadeExistente != null && AtividadeExistente.Id != existingAtividade.Id)
                 throw new ConflictException("A atividade já existe, insira outro nome de atividade.");
 
         try

@@ -31,7 +31,6 @@ public class MappingProfile : Profile
 
         // Mapeamentos para StatusConexao
         CreateMap<CreateStatusConexaoDTO, StatusConexao>()
-            .ForMember(dest => dest.Id_Usuario, opt => opt.MapFrom(src => src.IdUsuario))
             .ForMember(dest => dest.Forca_Sinal, opt => opt.MapFrom(src => src.ForcaSinal))
             .ForMember(dest => dest.Tipo_Conexao, opt => opt.MapFrom(src => src.TipoConexao))
             .ForMember(dest => dest.Ultima_Verificacao, opt => opt.MapFrom(_ => DateTime.UtcNow));
@@ -66,13 +65,13 @@ public class MappingProfile : Profile
         
         CreateMap<UpdateClienteDTO, Cliente>()
             .ForMember(dest => dest.Nome_cliente, opt => opt.MapFrom(src => src.NomeCliente))
-            .ForMember(dest => dest.Data_criacao, opt => opt.MapFrom(src => src.DataCadastro))
+            .ForMember(dest => dest.Data_criacao, opt => opt.MapFrom(src => src.DataCriacao))
             .ForMember(dest => dest.Ativo, opt => opt.MapFrom(src => src.Ativo))
             .ForMember(dest => dest.Foto_perfil, opt => opt.MapFrom(src => src.Foto_perfil));
 
         CreateMap<Cliente, ClienteDTO>()
             .ForMember(dest => dest.NomeCliente, opt => opt.MapFrom(src => src.Nome_cliente))
-            .ForMember(dest => dest.DataCadastro, opt => opt.MapFrom(src => src.Data_criacao))
+            .ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.Data_criacao))
             .ForMember(dest => dest.Ativo, opt => opt.MapFrom(src => src.Ativo))
             .ForMember(dest => dest.Foto_perfil, opt => opt.MapFrom(src => src.Foto_perfil));
 

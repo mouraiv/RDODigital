@@ -38,7 +38,7 @@ public class RelatorioDiarioRepository : IRelatorioDiarioRepository
             using var connection = _context.CreateConnection();
 
             var query = @"SELECT id_relatorio AS Id, id_projeto, id_usuario, data_hora, id_atividade, quantidade, 
-                            latitude, longitude, ultima_sincronizacao, sincronizado FROM RelatoriosDiarios FROM RelatoriosDiarios ORDER BY data_hora";
+                            latitude, longitude, ultima_sincronizacao, sincronizado FROM RelatoriosDiarios ORDER BY data_hora";
             return await connection.QueryAsync<RelatorioDiario>(query);
         }
         catch (InfrastructureException ex)

@@ -75,7 +75,7 @@ namespace Application.Services
                 throw new ConflictException("Matrícula já está em uso, escolha outra matrícula.");
 
             usuario.Senha_hash = BCrypt.Net.BCrypt.HashPassword(usuarioDto.Senha);
-            usuario.DataCriacao = DateTime.UtcNow;
+            usuario.Data_criacao = DateTime.UtcNow;
             usuario.Ativo = true;
             usuario.Foto_perfil = await ProcessarImagemAsync(fileStream, fileName, usuario.Matricula.Value);
 
@@ -127,11 +127,11 @@ namespace Application.Services
                 throw new NotFoundException("Matrícula do usuário não foi informada.");
 
             var usuarioMatriculaExistente = await _usuarioRepository.GetByMatriculaAsync(usuarioDto.Matricula.Value);
-            if (usuarioMatriculaExistente != null && usuarioMatriculaExistente.Id_usuario != usuario.Id_usuario)
+            if (usuarioMatriculaExistente != null && usuarioMatriculaExistente.Id != usuario.Id)
                 throw new ConflictException("Matrícula já está em uso, escolha outra matrícula.");
 
             var usuarioExistente = await _usuarioRepository.GetByIdEmailAsync(usuarioDto.Email ?? string.Empty);
-            if (usuarioExistente != null && usuarioExistente?.Id_usuario != usuario.Id_usuario)
+            if (usuarioExistente != null && usuarioExistente?.Id != usuario.Id)
                 throw new ConflictException("E-mail já cadastrado, escolha outro e-mail.");
 
             try

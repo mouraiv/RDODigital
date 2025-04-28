@@ -61,7 +61,7 @@ namespace Application.Services
             if (ClienteExistente != null)
                 throw new ConflictException("O Cliente já existe, Insira outro cliente.");
 
-            Cliente.Data_cadastro = DateTime.UtcNow;
+            Cliente.Data_criacao = DateTime.UtcNow;
             Cliente.Ativo = true;
             Cliente.Foto_perfil = await ProcessarImagemAsync(fileStream, fileName, Cliente.Nome_cliente);
 
@@ -115,7 +115,7 @@ namespace Application.Services
             }
 
             var ClienteExistente = await _ClienteRepository.GetByIdClienteAsync(ClienteDto.NomeCliente);
-            if (ClienteExistente != null && ClienteExistente.Id_cliente != Cliente.Id_cliente)
+            if (ClienteExistente != null && ClienteExistente.Id != Cliente.Id)
                 throw new ConflictException("O Cliente já existe, insira outro nome de cliente.");
 
 

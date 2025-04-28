@@ -3,7 +3,7 @@ namespace Application.DTOs
 {
     public class StatusConexaoDTO
     {
-        public int IdStatus { get; set; }
+        public int Id { get; set; }
         public int IdUsuario { get; set; }
         public string? Status { get; set; }
         public DateTime UltimaVerificacao { get; set; }
@@ -16,7 +16,6 @@ namespace Application.DTOs
     // Application/DTOs/CreateStatusConexaoDTO.cs
     public class CreateStatusConexaoDTO
     {
-        public int IdUsuario { get; set; }
         public string? Status { get; set; }
         public int ForcaSinal { get; set; }
         public string? TipoConexao { get; set; }
@@ -27,7 +26,7 @@ namespace Application.DTOs
     // Application/DTOs/UpdateStatusConexaoDTO.cs
     public class UpdateStatusConexaoDTO
     {
-        public int IdStatus { get; set; }
+        public int Id { get; set; }
         public string? Status { get; set; }
         public int ForcaSinal { get; set; }
         public string? TipoConexao { get; set; }

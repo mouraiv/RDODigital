@@ -33,7 +33,7 @@ public class StatusConexaoController : ControllerBase
     {
 
         var createdStatus = await _service.CreateAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = createdStatus.IdStatus }, new{
+        return CreatedAtAction(nameof(GetById), new { id = createdStatus.Id }, new{
             Message = "Status de conexão criado com sucesso.",
             StatusConexao = createdStatus
         });
