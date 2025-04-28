@@ -19,7 +19,8 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Usuarios WHERE id_usuario = @Id";
+                var query = @"SELECT id_usuario AS Id, matricula, nome, email, senha_hash, cargo, foto_perfil, 
+                                telefone_corporativo, data_admissao, ativo, data_criacao FROM Usuarios WHERE id_usuario = @Id";
             
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Id = id });
@@ -36,7 +37,8 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Usuarios WHERE email = @Email";
+                var query = @"SELECT id_usuario AS Id, matricula, nome, email, senha_hash, cargo, foto_perfil, 
+                                telefone_corporativo, data_admissao, ativo, data_criacao FROM Usuarios WHERE email = @Email";
             
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Email = email });
@@ -52,7 +54,8 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Usuarios WHERE matricula = @Matricula";
+                var query = @"SELECT id_usuario AS Id, matricula, nome, email, senha_hash, cargo, foto_perfil, 
+                                telefone_corporativo, data_admissao, ativo, data_criacao FROM Usuarios WHERE matricula = @Matricula";
             
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryFirstOrDefaultAsync<Usuario>(query, new { Matricula = matricula });
@@ -68,7 +71,8 @@ namespace Infra.Repositories
         {
             try
             {
-                 var query = "SELECT * FROM Usuarios";
+                 var query = @"SELECT id_usuario AS Id, matricula, nome, email, senha_hash, cargo, foto_perfil, 
+                                telefone_corporativo, data_admissao, ativo, data_criacao FROM Usuarios";
             
                 using var connection = _context.CreateConnection();
                 return await connection.QueryAsync<Usuario>(query);
@@ -90,7 +94,7 @@ namespace Infra.Repositories
                         SELECT LAST_INSERT_ID();";
             
                 using var connection = _context.CreateConnection();
-                usuario.Id_usuario = await connection.ExecuteScalarAsync<int>(query, usuario);
+                usuario.Id = await connection.ExecuteScalarAsync<int>(query, usuario);
             }
             catch (InfrastructureException ex)
             {

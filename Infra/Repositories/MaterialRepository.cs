@@ -20,7 +20,7 @@ public class MaterialRepository : IMaterialRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Material WHERE id_material = @Id";
+            var query = "SELECT id_material AS Id, id_projeto, data_hora, id_atividade, quantidade FROM Material WHERE id_material = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<Material>(query, new { Id = id });
             return result;
         }
@@ -36,7 +36,7 @@ public class MaterialRepository : IMaterialRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Material ORDER BY data_hora";
+            var query = "SELECT id_material AS Id, id_projeto, data_hora, id_atividade, quantidade FROM Material ORDER BY data_hora";
             return await connection.QueryAsync<Material>(query);
         }
         catch (InfrastructureException ex)
@@ -50,7 +50,7 @@ public class MaterialRepository : IMaterialRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Material WHERE nome_material = @Nome";
+            var query = "SELECT id_material AS Id, id_projeto, data_hora, id_atividade, quantidade FROM Material WHERE nome_material = @Nome";
             return await connection.QueryFirstOrDefaultAsync<Material>(query, new { Nome = nome });
         }
         catch (InfrastructureException ex)
@@ -89,7 +89,7 @@ public class MaterialRepository : IMaterialRepository
                             data_hora = @Data_hora,
                             id_atividade = @Id_atividade,
                             quantidade = @Quantidade
-                        WHERE id_material = @Id_material";
+                        WHERE id_material = @Id";
 
             var affectedRows = await connection.ExecuteAsync(query, material);
             return affectedRows > 0;

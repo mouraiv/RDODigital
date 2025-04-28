@@ -20,7 +20,8 @@ public class RelatorioDiarioRepository : IRelatorioDiarioRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM RelatoriosDiarios WHERE id_relatorio = @Id";
+            var query = @"SELECT id_relatorio AS Id, id_projeto, id_usuario, data_hora, id_atividade, quantidade, 
+                            latitude, longitude, ultima_sincronizacao, sincronizado FROM RelatoriosDiarios WHERE id_relatorio = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<RelatorioDiario>(query, new { Id = id });
             return result;
         }
@@ -36,7 +37,8 @@ public class RelatorioDiarioRepository : IRelatorioDiarioRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM RelatoriosDiarios ORDER BY data_hora";
+            var query = @"SELECT id_relatorio AS Id, id_projeto, id_usuario, data_hora, id_atividade, quantidade, 
+                            latitude, longitude, ultima_sincronizacao, sincronizado FROM RelatoriosDiarios FROM RelatoriosDiarios ORDER BY data_hora";
             return await connection.QueryAsync<RelatorioDiario>(query);
         }
         catch (InfrastructureException ex)
@@ -82,7 +84,7 @@ public class RelatorioDiarioRepository : IRelatorioDiarioRepository
                             longitude = @Longitude,
                             ultima_sincronizacao = @Ultima_sincronizacao,
                             sincronizado = @Sincronizado
-                        WHERE id_relatorio = @Id_relatorio";
+                        WHERE id_relatorio = @Id";
 
             var affectedRows = await connection.ExecuteAsync(query, relatorioDiario);
             return affectedRows > 0;

@@ -19,7 +19,7 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Clientes WHERE id_cliente = @Id";
+                var query = "SELECT id_cliente AS Id, nome_cliente, Data_criacao, ativo, foto_perfil FROM Clientes WHERE id_cliente = @Id";
                 
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryFirstOrDefaultAsync<Cliente>(query, new { Id = id });
@@ -36,7 +36,7 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Clientes WHERE nome_cliente = @Nome_cliente";
+                var query = "SELECT id_cliente AS Id, nome_cliente, Data_criacao, ativo, foto_perfil FROM Clientes WHERE nome_cliente = @Nome_cliente";
                 
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryFirstOrDefaultAsync<Cliente>(query, new { Nome_cliente = nome_cliente });
@@ -53,7 +53,7 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "SELECT * FROM Clientes";
+                var query = "SELECT id_cliente AS Id, nome_cliente, Data_criacao, ativo, foto_perfil FROM Clientes";
                 
                 using var connection = _context.CreateConnection();
                 var result = await connection.QueryAsync<Cliente>(query);
@@ -70,7 +70,7 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "INSERT INTO Clientes (nome_cliente, data_cadastro, ativo, foto_perfil) VALUES (@Nome_cliente, @Data_cadastro, @Ativo, @Foto_perfil); SELECT LAST_INSERT_ID();";
+                var query = "INSERT INTO Clientes (nome_cliente, data_criacao, ativo, foto_perfil) VALUES (@Nome_cliente, @Data_criacao, @Ativo, @Foto_perfil); SELECT LAST_INSERT_ID();";
                 
                 using var connection = _context.CreateConnection();
                 await connection.ExecuteAsync(query, cliente);
@@ -85,10 +85,10 @@ namespace Infra.Repositories
         {
             try
             {
-                var query = "UPDATE Clientes SET nome_cliente = @Nome_cliente, data_cadastro = @Data_cadastro, ativo = @Ativo, foto_perfil = @Foto_perfil  WHERE id_cliente = @Id";
+                var query = "UPDATE Clientes SET nome_cliente = @Nome_cliente, data_criacao = @Data_criacao, ativo = @Ativo, foto_perfil = @Foto_perfil  WHERE id_cliente = @Id";
                 
                 using var connection = _context.CreateConnection();
-                await connection.ExecuteAsync(query, new { cliente.Nome_cliente, cliente.Data_cadastro, cliente.Ativo, cliente.Foto_perfil, Id = id });
+                await connection.ExecuteAsync(query, new { cliente.Nome_cliente, cliente.Data_criacao, cliente.Ativo, cliente.Foto_perfil, Id = id });
             }
             catch (InfrastructureException ex)
             {

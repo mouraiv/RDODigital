@@ -17,10 +17,16 @@ public class CargoRepository : ICargoRepository
 
     public async Task<Cargo?> GetByIdAsync(int id)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Cargos WHERE id_cargo = @Id";
+            var query = @"SELECT 
+                            id_cargo AS Id,
+                            nome_cargo,
+                            descricao
+                          FROM Cargos
+                          WHERE id_cargo = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<Cargo>(query, new { Id = id });
             return result;
         }
@@ -28,15 +34,20 @@ public class CargoRepository : ICargoRepository
         {
             throw new InfrastructureException($"Erro ao buscar o cargo com ID {id}: {ex.Message}", ex);
         }
-
     }
 
     public async Task<IEnumerable<Cargo>> GetAllAsync()
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Cargos ORDER BY nome_cargo";
+            var query = @"SELECT 
+                            id_cargo AS Id,
+                            nome_cargo,
+                            descricao
+                          FROM Cargos
+                          ORDER BY nome_cargo";
             return await connection.QueryAsync<Cargo>(query);
         }
         catch (InfrastructureException ex)
@@ -47,10 +58,16 @@ public class CargoRepository : ICargoRepository
 
     public async Task<Cargo?> GetByNameAsync(string nome)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Cargos WHERE nome_cargo = @Nome";
+            var query = @"SELECT 
+                            id_cargo AS Id,
+                            nome_cargo,
+                            descricao
+                          FROM Cargos
+                          WHERE nome_cargo = @Nome";
             return await connection.QueryFirstOrDefaultAsync<Cargo>(query, new { Nome = nome });
         }
         catch (InfrastructureException ex)
@@ -61,13 +78,14 @@ public class CargoRepository : ICargoRepository
 
     public async Task<int> CreateAsync(Cargo cargo)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
             var query = @"INSERT INTO Cargos (nome_cargo, descricao)
-                        VALUES (@Nome_cargo, @Descricao);
-                        SELECT LAST_INSERT_ID();";
-            
+                          VALUES (@Nome_cargo, @Descricao);
+                          SELECT LAST_INSERT_ID();";
+
             var id = await connection.ExecuteScalarAsync<int>(query, cargo);
             return id;
         }
@@ -79,13 +97,14 @@ public class CargoRepository : ICargoRepository
 
     public async Task<bool> UpdateAsync(Cargo cargo)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
             var query = @"UPDATE Cargos SET 
-                        nome_cargo = @Nome_cargo,
-                        descricao = @Descricao
-                        WHERE id_cargo = @Id_cargo";
+                            nome_cargo = @Nome_cargo,
+                            descricao = @Descricao
+                          WHERE id_cargo = @Id";
             
             var affectedRows = await connection.ExecuteAsync(query, cargo);
             return affectedRows > 0;
@@ -98,13 +117,13 @@ public class CargoRepository : ICargoRepository
 
     public async Task<bool> DeleteAsync(int id)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
-        
+
             var query = "DELETE FROM Cargos WHERE id_cargo = @Id";
             var affectedRows = await connection.ExecuteAsync(query, new { Id = id });
             return affectedRows > 0;
-
         }
         catch (InfrastructureException ex)
         {

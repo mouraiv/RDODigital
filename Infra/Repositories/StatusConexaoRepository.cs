@@ -19,7 +19,7 @@ public class StatusConexaoRepository : IStatusConexaoRepository
     public async Task<StatusConexao?> GetByIdAsync(int id)
     {
         try{
-            var query = "SELECT * FROM StatusConexao WHERE Id_Status = @Id";
+            var query = @"SELECT Id_Status AS Id, Id_Usuario, Status, Ultima_Verificacao, Forca_Sinal, Tipo_Conexao, Latitude, Longitude FROM StatusConexao WHERE Id_Status = @Id";
 
             using var connection = _context.CreateConnection();
             
@@ -38,7 +38,7 @@ public class StatusConexaoRepository : IStatusConexaoRepository
     {
         try
         {
-            var query = "SELECT * FROM StatusConexao WHERE Id_Usuario = @UsuarioId";
+            var query = "SELECT Id_Status AS Id, Id_Usuario, Status, Ultima_Verificacao, Forca_Sinal, Tipo_Conexao, Latitude, Longitude FROM StatusConexao WHERE Id_Usuario = @UsuarioId";
             using var connection = _context.CreateConnection();
             var result = await connection.QueryAsync<StatusConexao>(query, new { UsuarioId = usuarioId });
             return result;
@@ -83,7 +83,7 @@ public class StatusConexaoRepository : IStatusConexaoRepository
                             Tipo_Conexao = @Tipo_Conexao,
                             Latitude = @Latitude,
                             Longitude = @Longitude
-                            WHERE Id_Status = @Id_Status";
+                            WHERE Id_Status = @Id";
                 
                 var affectedRows = await connection.ExecuteAsync(query, status);
                 return affectedRows > 0;

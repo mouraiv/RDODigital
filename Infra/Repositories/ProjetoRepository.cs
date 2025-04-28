@@ -20,7 +20,9 @@ public class ProjetoRepository : IProjetoRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Projetos WHERE id_projeto = @Id";
+            var query = @"SELECT id_projeto AS Id, titulo_infovia, id_cliente, cidade, mes_referencia,
+                            id_fiscal, id_supervisor, data_inicio, data_fim,
+                            latitude, longitude, status, progresso_tempo, progresso_projeto FROM Projetos WHERE id_projeto = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<Projeto>(query, new { Id = id });
             return result;
         }
@@ -36,7 +38,9 @@ public class ProjetoRepository : IProjetoRepository
         try{
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Projetos ORDER BY data_criacao DESC";
+            var query = @"SELECT id_projeto AS Id, titulo_infovia, id_cliente, cidade, mes_referencia,
+                            id_fiscal, id_supervisor, data_inicio, data_fim,
+                            latitude, longitude, status, progresso_tempo, progresso_projeto FROM Projetos ORDER BY data_criacao DESC";
             return await connection.QueryAsync<Projeto>(query);
         }
         catch (InfrastructureException ex)
@@ -91,7 +95,7 @@ public class ProjetoRepository : IProjetoRepository
                             status = @Status,
                             progresso_tempo = @Progresso_tempo,
                             progresso_projeto = @Progresso_projeto
-                        WHERE id_projeto = @Id_projeto";
+                        WHERE id_projeto = @Id";
 
             var affectedRows = await connection.ExecuteAsync(query, projeto);
             return affectedRows > 0;

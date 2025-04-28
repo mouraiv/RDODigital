@@ -4,10 +4,8 @@ using Domain.Exceptions;
 
 namespace Domain.Entities
 {
-    public class Usuario
+    public class Usuario : BaseEntity
     {
-        [Key]
-        public int Id_usuario { get; set; }
         public int? Matricula { get; set; }
         public string? Nome { get; set; }
         public string? Email { get; set; }
@@ -17,7 +15,6 @@ namespace Domain.Entities
         public string? Telefone_corporativo { get; set; }
         public DateTime Data_admissao { get; set; }
         public bool Ativo { get; set; }
-        public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
         public Usuario() {}
 

@@ -17,29 +17,48 @@ public class AtividadeRepository : IAtividadeRepository
 
     public async Task<Atividade?> GetByIdAsync(int id)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Atividades WHERE id_atividade = @Id";
+            var query = @"SELECT 
+                            id_atividade AS Id,
+                            id_cliente,
+                            item,
+                            classe,
+                            nome_atividade,
+                            unidade_medida
+                          FROM Atividades
+                          WHERE id_atividade = @Id";
+                          
             var result = await connection.QueryFirstOrDefaultAsync<Atividade>(query, new { Id = id });
             return result;
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao buscar o Atividade com ID {id}: {ex.Message}", ex);
         }
-
     }
 
     public async Task<IEnumerable<Atividade>> GetAllAsync()
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Atividades ORDER BY item";
+            var query = @"SELECT 
+                            id_atividade AS Id,
+                            id_cliente,
+                            item,
+                            classe,
+                            nome_atividade,
+                            unidade_medida
+                          FROM Atividades
+                          ORDER BY item";
+                          
             return await connection.QueryAsync<Atividade>(query);
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao buscar Atividades: {ex.Message}", ex);
         }
@@ -47,49 +66,65 @@ public class AtividadeRepository : IAtividadeRepository
 
     public async Task<Atividade?> GetByNameAsync(string nome)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
-            var query = "SELECT * FROM Atividades WHERE nome_atividade = @Nome";
+            var query = @"SELECT 
+                            id_atividade AS Id,
+                            id_cliente,
+                            item,
+                            classe,
+                            nome_atividade,
+                            unidade_medida
+                          FROM Atividades
+                          WHERE nome_atividade = @Nome";
+                          
             return await connection.QueryFirstOrDefaultAsync<Atividade>(query, new { Nome = nome });
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao buscar o Atividade com nome {nome}: {ex.Message}", ex);
         }
     }
 
-    public async Task<int> CreateAsync(Atividade Atividade)
+    public async Task<int> CreateAsync(Atividade atividade)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
             var query = @"INSERT INTO Atividades (id_cliente, item, classe, nome_atividade, unidade_medida)
-                        VALUES (@Id_cliente, @Item, @Classe, @Nome_atividade, @Unidade_medida);
-                        SELECT LAST_INSERT_ID();";
-            
-            var id = await connection.ExecuteScalarAsync<int>(query, Atividade);
+                          VALUES (@Id_cliente, @Item, @Classe, @Nome_atividade, @Unidade_medida);
+                          SELECT LAST_INSERT_ID();";
+                          
+            var id = await connection.ExecuteScalarAsync<int>(query, atividade);
             return id;
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao adicionar Atividade: {ex.Message}", ex);
         }
     }
 
-    public async Task<bool> UpdateAsync(Atividade Atividade)
+    public async Task<bool> UpdateAsync(Atividade atividade)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
 
             var query = @"UPDATE Atividades SET 
-                        id_cliente = @Id_cliente, item = @Item, classe = @Classe, nome_atividade = @Nome_atividade, unidade_medida = @Unidade_medida
-                        WHERE id_atividade = @Id_atividade";
-            
-            var affectedRows = await connection.ExecuteAsync(query, Atividade);
+                            id_cliente = @Id_cliente,
+                            item = @Item,
+                            classe = @Classe,
+                            nome_atividade = @Nome_atividade,
+                            unidade_medida = @Unidade_medida
+                          WHERE id_atividade = @Id";
+                          
+            var affectedRows = await connection.ExecuteAsync(query, atividade);
             return affectedRows > 0;
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao atualizar Atividade: {ex.Message}", ex);
         }
@@ -97,15 +132,15 @@ public class AtividadeRepository : IAtividadeRepository
 
     public async Task<bool> DeleteAsync(int id)
     {
-        try{
+        try
+        {
             using var connection = _context.CreateConnection();
-        
+
             var query = "DELETE FROM Atividades WHERE id_atividade = @Id";
             var affectedRows = await connection.ExecuteAsync(query, new { Id = id });
             return affectedRows > 0;
-
         }
-        catch (InfrastructureException ex)
+        catch (Exception ex)
         {
             throw new InfrastructureException($"Erro ao deletar Atividade: {ex.Message}", ex);
         }

@@ -1,12 +1,8 @@
-// Domain/Entities/Cargo.cs
-using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities;
 
-public class Atividade
+public class Atividade : BaseEntity
 {
-    [Key]
-    public int Id_atividade { get; set; }
     public int? Id_cliente { get; set; }
     public Cliente? Cliente { get; set; } 
     public string? Item { get; set; }
