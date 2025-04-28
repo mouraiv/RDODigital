@@ -15,4 +15,4 @@ obj/
 .DS_Store
 
 # Uploads da aplicação
-/API/Uploads/
+Uploads/
